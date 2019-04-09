@@ -19,6 +19,7 @@ public class SandLab
   private SandDisplay display;
   //sorry Cody, I must add fields because aesthetic
   private Color[] colors;
+  private Random random = new Random();
   
   /**
    * Constructor for SandLab
@@ -89,7 +90,13 @@ public class SandLab
     //The scalar refers to how big the value could be
     //int someRandom = (int) (Math.random() * scalar)
     //remember that you need to watch for the edges of the array
-    
+    int row = getR(grid.length);
+    int col = getR(grid[0].length);
+    if(grid[row][col] == SAND && grid[row + 1][col] == EMPTY)
+    {
+    	grid[row][col] = EMPTY;
+    	grid[row + 1][col] = SAND;
+    }
     
   }
   
@@ -111,5 +118,10 @@ public class SandLab
         locationClicked(mouseLoc[0], mouseLoc[1], display.getTool());
       }
     }
+  }
+  
+  public int getR(int maximum)
+  {
+  	return random.nextInt(maximum);
   }
 }
