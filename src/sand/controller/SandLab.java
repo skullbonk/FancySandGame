@@ -14,7 +14,8 @@ public class SandLab
   //do not add any more fields below
   private int[][] grid;
   private SandDisplay display;
-  
+  //sorry Cody, I must add fields because aesthetic
+  private Color[] colors;
   
   /**
    * Constructor for SandLab
@@ -27,9 +28,13 @@ public class SandLab
     // Change this value to add more buttons
     //Step 4,6
     names = new String[2];
+    colors = new Color[2];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
+    
+    colors[EMPTY] = new Color(5, 5, 5);
+    colors[METAL] = new Color(130, 140, 140);
     
     //1. Add code to initialize the data member grid with same dimensions
     
@@ -55,9 +60,13 @@ public class SandLab
 		  {
 			  if(grid[row][col] == METAL)
 			  {
-				  display.setColor(row, col. );
+				  display.setColor(row, col, colors[METAL]);
 			  }
-			  
+			  // if it isn't any of the others it must be empty
+			  else
+			  {
+				  display.setColor(row, col, colors[EMPTY]);
+			  }
 		  }
 	  }
     
