@@ -6,10 +6,13 @@ import sand.view.SandDisplay;
 
 public class SandLab
 {
+  public ArrayList<Integer> tools = new ArrayList<Integer>();
   //Step 4,6
   //add constants for particle types here
   public static final int EMPTY = 0;
   public static final int METAL = 1;
+  public static final int SAND = 2;
+  
   
   //do not add any more fields below
   private int[][] grid;
@@ -27,14 +30,16 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[2];
-    colors = new Color[2];
+    names = new String[3];
+    colors = new Color[3];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
+    names[SAND] = "Sand";
     
     colors[EMPTY] = new Color(5, 5, 5);
     colors[METAL] = new Color(130, 140, 140);
+    colors[SAND] = new Color(200, 215, 90);
     
     //1. Add code to initialize the data member grid with same dimensions
     
@@ -62,8 +67,11 @@ public class SandLab
 			  {
 				  display.setColor(row, col, colors[METAL]);
 			  }
-			  // if it isn't any of the others it must be empty
-			  else
+			  else if(grid[row][col] == SAND)
+			  {
+				  display.setColor(row, col, colors[SAND]);
+			  }			  
+			  else // if it isn't any of the others it must be empty 
 			  {
 				  display.setColor(row, col, colors[EMPTY]);
 			  }
