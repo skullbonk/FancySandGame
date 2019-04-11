@@ -6,12 +6,14 @@ import sand.view.SandDisplay;
 
 public class SandLab
 {
-  public ArrayList<Integer> tools = new ArrayList<Integer>();
+//	public Map tools = new Hashtable();
   //Step 4,6
   //add constants for particle types here
   public static final int EMPTY = 0;
   public static final int METAL = 1;
   public static final int SAND = 2;
+  
+  public static int[] elements = {EMPTY, METAL, SAND};
   
   
   //do not add any more fields below
@@ -31,8 +33,8 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[3];
-    colors = new Color[3];
+    names = new String[elements.length];
+    colors = new Color[elements.length];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
@@ -58,26 +60,26 @@ public class SandLab
   //copies each element of grid into the display
   public void updateDisplay()
   {
+  	int element;
       //Step 3
    //Hint - use a nested for loop
 	  for(int row = 0; row < grid.length; row ++)
 	  {
 		  for(int col = 0; col < grid[0].length; col ++)
 		  {
-			  if(grid[row][col] == METAL)
+		  	element = grid[row][col];
+			  switch(element)
 			  {
-				  display.setColor(row, col, colors[METAL]);
+			  case METAL: element = METAL;
+			  	break;
+			  case SAND: element = SAND;
+			  	break;
+			  default: element = EMPTY; // default
+			  	break;
 			  }
-			  else if(grid[row][col] == SAND)
-			  {
-				  display.setColor(row, col, colors[SAND]);
-			  }			  
-			  else // if it isn't any of the others it must be empty 
-			  {
-				  display.setColor(row, col, colors[EMPTY]);
-			  }
-		  }
-	  }
+			  display.setColor(row, col, colors[element]);
+		  } // end col loop
+	  } // end row loop
     
   }
 
