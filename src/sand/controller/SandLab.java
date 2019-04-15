@@ -94,12 +94,34 @@ public class SandLab
     //remember that you need to watch for the edges of the array
     int row = getR(grid.length);
     int col = getR(grid[0].length);
-    if(grid[row][col] == SAND && grid[row + 1][col] == EMPTY)
-    {
-    	grid[row][col] = EMPTY;
-    	grid[row + 1][col] = SAND;
-    }
     
+    if(grid[row][col] == SAND)
+    {
+    	if(!(row == grid.length - 1))
+    	{
+    		if(grid[row + 1][col] == EMPTY)
+    		{
+    			grid[row][col] = EMPTY;
+    			grid[row + 1][col] = SAND;
+    		}
+    		else 
+    		{
+    			if(col > 0)
+    			{
+    				if(grid[row + 1][col - 1] == EMPTY)
+    				{
+    					grid[row + 1][col - 1] = SAND;
+    					grid[row][col] = EMPTY;
+    				}
+    				else if(grid[row + 1][col + 1] == EMPTY && col < grid[0].length)
+    				{
+    					grid[row + 1][col + 1] = SAND;
+    					grid[row][col] = EMPTY;
+    				}
+    			}
+    		}
+    	}
+    }
   }
   
   //do not modify this method!
