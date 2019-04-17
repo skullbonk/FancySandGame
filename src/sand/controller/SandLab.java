@@ -8,13 +8,16 @@ public class SandLab
 {
 //	public Map tools = new Hashtable();
   //Step 4,6
-  //add constants for particle types here
+  //add constants for particle types here	
   public static final int EMPTY = 0;
   public static final int METAL = 1;
   public static final int SAND = 2;
+  public static final int WATER = 3;
+  public static final int DIRT = 4;
   
-  public static int[] elements = {EMPTY, METAL, SAND};
+  public static int[] elements = {EMPTY, METAL, SAND, WATER, DIRT};
   
+  public static final int ERROR = elements.length;
   
   //do not add any more fields below
   private int[][] grid;
@@ -22,6 +25,7 @@ public class SandLab
   //sorry Cody, I must add fields because aesthetic
   private Color[] colors;
   private Random random = new Random();
+  private int operation;
   
   /**
    * Constructor for SandLab
@@ -34,15 +38,21 @@ public class SandLab
     // Change this value to add more buttons
     //Step 4,6
     names = new String[elements.length];
-    colors = new Color[elements.length];
+    colors = new Color[elements.length + 1];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
+    names[WATER] = "Water";
+    names[DIRT] = "Dirt";
     
     colors[EMPTY] = new Color(5, 5, 5);
     colors[METAL] = new Color(130, 140, 140);
     colors[SAND] = new Color(200, 215, 90);
+    colors[WATER] = new Color(15, 125, 210);
+    colors[DIRT] = new Color(80, 40, 0);
+    
+    colors[ERROR] = new Color(245, 40, 35);
     
     //1. Add code to initialize the data member grid with same dimensions
     
@@ -74,6 +84,10 @@ public class SandLab
 			  	break;
 			  case SAND: element = SAND;
 			  	break;
+			  case WATER: element = WATER;
+			  	break;
+			  case DIRT: element = DIRT;
+			  	break;
 			  default: element = EMPTY; // default
 			  	break;
 			  }
@@ -95,33 +109,103 @@ public class SandLab
     int row = getR(grid.length);
     int col = getR(grid[0].length);
     
-    if(grid[row][col] == SAND)
-    {
-    	if(!(row == grid.length - 1))
+    try
+    {    	
+    	if(grid[row][col] == SAND)
     	{
-    		if(grid[row + 1][col] == EMPTY)
+    		if(!(row == grid.length - 1))
     		{
-    			grid[row][col] = EMPTY;
-    			grid[row + 1][col] = SAND;
-    		}
-    		else 
-    		{
-    			if(col > 0)
+    			if(grid[row + 1][col] == EMPTY)
     			{
-    				if(grid[row + 1][col - 1] == EMPTY)
+    				grid[row][col] = EMPTY;
+    				grid[row + 1][col] = SAND;
+    			}
+    			else if(grid[row + 1][col] == WATER)
+    			{
+    				grid[row][col] = WATER;
+    				grid[row + 1][col] = SAND;
+    			}
+    			else 
+    			{
+    				if(col > 0)
     				{
-    					grid[row + 1][col - 1] = SAND;
-    					grid[row][col] = EMPTY;
+    					if(grid[row + 1][col - 1] == EMPTY)
+    					{
+    						grid[row + 1][col - 1] = SAND;
+    						grid[row][col] = EMPTY;
+    					}
+    					else if(grid[row + 1][col + 1] == EMPTY && col < grid[0].length)
+    					{
+    						grid[row + 1][col + 1] = SAND;
+    						grid[row][col] = EMPTY;
+    					}
     				}
-    				else if(grid[row + 1][col + 1] == EMPTY && col < grid[0].length)
+    			}
+    		}
+    	}
+    	
+    	if(grid[row][col] == WATER)
+    	{
+    		// fall down
+    		if(row != 19)
+    		{    			
+    			if(grid[row + 1][col] == EMPTY)
+    			{
+    				grid[row][col] = EMPTY;
+    				grid[row + 1][col] = WATER;
+    			}
+    			else
+    			if(grid[row + 1][col] != EMPTY)
+    			{
+    				operation = getR(2);
+    				if(operation == 1) // add
     				{
-    					grid[row + 1][col + 1] = SAND;
-    					grid[row][col] = EMPTY;
+    					if(col != 19)
+    					{
+    						if(grid[row][col + 1] == EMPTY)
+    						{    							
+    							grid[row][col] = EMPTY;
+    							grid[row][col + 1] = WATER;
+    						}
+    					}
+    				}
+    				else // subtract
+    				{
+    					if(col != 0)
+    					{
+    						if(grid[row][col - 1] == EMPTY)
+    						{
+    							grid[row][col] = EMPTY;
+    							grid[row][col + 1] = WATER;
+    						}
+    					}
     				}
     			}
     		}
     	}
     }
+    
+    catch(ArrayIndexOutOfBoundsException boundsExcept)
+    {
+    	display.setColor(row, col, colors[ERROR]);
+    	System.out.println("Index out of bounds at row: " + row + ", col: " + col + "\n");
+    }
+  }
+ 
+  public void liquidSpread(int row, int col, int element)
+  {
+  	int testRow = row;
+  	testRow += 1;
+  	while(testRow >= 20)
+  	{
+  		
+  	}
+  	
+  	if(grid[row + 1][col] == EMPTY)
+  	{
+  		
+  	}
+  	
   }
   
   //do not modify this method!
