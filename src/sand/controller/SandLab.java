@@ -14,8 +14,9 @@ public class SandLab
   public static final int SAND = 2;
   public static final int WATER = 3;
   public static final int DIRT = 4;
+  public static final int MILK = 5;
   
-  public static int[] elements = {EMPTY, METAL, SAND, WATER, DIRT};
+  public static int[] elements = {EMPTY, METAL, SAND, WATER, DIRT, MILK};
   
   public static final int ERROR = elements.length;
   
@@ -45,12 +46,14 @@ public class SandLab
     names[SAND] = "Sand";
     names[WATER] = "Water";
     names[DIRT] = "Dirt";
+    names[MILK] = "Milk";
     
     colors[EMPTY] = new Color(5, 5, 5);
     colors[METAL] = new Color(130, 140, 140);
     colors[SAND] = new Color(200, 215, 90);
     colors[WATER] = new Color(15, 125, 210);
     colors[DIRT] = new Color(80, 40, 0);
+    colors[MILK] = new Color(230, 230, 200);
     
     colors[ERROR] = new Color(245, 40, 35);
     
@@ -87,6 +90,8 @@ public class SandLab
 			  case WATER: element = WATER;
 			  	break;
 			  case DIRT: element = DIRT;
+			  	break;
+			  case MILK: element = MILK;
 			  	break;
 			  default: element = EMPTY; // default
 			  	break;
@@ -144,45 +149,11 @@ public class SandLab
     		}
     	}
     	
-    	if(grid[row][col] == WATER)
-    	{
-    		// fall down
-    		if(row != 19)
-    		{    			
-    			if(grid[row + 1][col] == EMPTY)
-    			{
-    				grid[row][col] = EMPTY;
-    				grid[row + 1][col] = WATER;
-    			}
-    			else
-    			if(grid[row + 1][col] != EMPTY)
-    			{
-    				operation = getR(2);
-    				if(operation == 1) // add
-    				{
-    					if(col != 19)
-    					{
-    						if(grid[row][col + 1] == EMPTY)
-    						{    							
-    							grid[row][col] = EMPTY;
-    							grid[row][col + 1] = WATER;
-    						}
-    					}
-    				}
-    				else // subtract
-    				{
-    					if(col != 0)
-    					{
-    						if(grid[row][col - 1] == EMPTY)
-    						{
-    							grid[row][col] = EMPTY;
-    							grid[row][col + 1] = WATER;
-    						}
-    					}
-    				}
-    			}
-    		}
-    	}
+    	// WATER
+    	liquidSpread(row, col, WATER);
+    	
+    	// MILK
+    	liquidSpread(row, col, MILK);
     }
     
     catch(ArrayIndexOutOfBoundsException boundsExcept)
@@ -194,16 +165,64 @@ public class SandLab
  
   public void liquidSpread(int row, int col, int element)
   {
-  	int testRow = row;
-  	testRow += 1;
-  	while(testRow >= 20)
+  	if(grid[row][col] == element)
   	{
-  		
-  	}
-  	
-  	if(grid[row + 1][col] == EMPTY)
-  	{
-  		
+  		// fall down
+  		if(row != 19)
+  		{    			
+  			if(grid[row + 1][col] == EMPTY)
+  			{
+  				grid[row][col] = EMPTY;
+  				grid[row + 1][col] = element;
+  			}
+  			else
+  			{
+  				operation = getR(2);
+  				if(operation == 1) // right
+  				{
+  					if(col != 19)
+  					{
+  						if(grid[row][col + 1] == EMPTY)
+  						{
+  							grid[row][col] = EMPTY;
+  							grid[row][col + 1] = element;
+  						}
+  						else if(col != 0)
+  						{
+  							if(grid[row][col - 1] == EMPTY)
+  							{
+  								grid[row][col] = EMPTY;
+  								grid[row][col - 1] = element;
+  							}
+  						}
+  					}
+  					else
+  					{
+  						if(grid[row][col - 1] == EMPTY)
+  						{
+  							grid[row][col] = EMPTY;
+  							grid[row][col - 1] = element;
+  						}
+  					}
+  				}
+  				else // left
+  				{
+  					if(col != 0)
+  					{
+  						if(grid[row][col - 1] == EMPTY)
+  						{
+  							grid[row][col] = EMPTY;
+  							grid[row][col - 1] = element;			
+  						}
+  					}
+  					else if(grid[row][col + 1] == EMPTY)
+  					{
+  						grid[row][col] = EMPTY;
+  						grid[row][col + 1] = element;
+  					}
+  				}
+  			}
+  		}
   	}
   	
   }
