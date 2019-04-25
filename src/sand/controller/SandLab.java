@@ -15,8 +15,9 @@ public class SandLab
   public static final int WATER = 3;
   public static final int DIRT = 4;
   public static final int MILK = 5;
+  public static final int VAPORS = 6;
   
-  public static int[] elements = {EMPTY, METAL, SAND, WATER, DIRT, MILK};
+  public static int[] elements = {EMPTY, METAL, SAND, WATER, DIRT, MILK, VAPORS};
   
   public static final int ERROR = elements.length;
   
@@ -47,6 +48,7 @@ public class SandLab
     names[WATER] = "Water";
     names[DIRT] = "Dirt";
     names[MILK] = "Milk";
+    names[VAPORS] = "Vapors";
     
     colors[EMPTY] = new Color(5, 5, 5);
     colors[METAL] = new Color(130, 140, 140);
@@ -54,6 +56,7 @@ public class SandLab
     colors[WATER] = new Color(15, 125, 210);
     colors[DIRT] = new Color(80, 40, 0);
     colors[MILK] = new Color(230, 230, 200);
+    colors[VAPORS] = new Color(220, 230, 230);
     
     colors[ERROR] = new Color(245, 40, 35);
     
@@ -92,6 +95,8 @@ public class SandLab
 			  case DIRT: element = DIRT;
 			  	break;
 			  case MILK: element = MILK;
+			  	break;
+			  case VAPORS: element = VAPORS;
 			  	break;
 			  default: element = EMPTY; // default
 			  	break;
@@ -154,6 +159,10 @@ public class SandLab
     	
     	// MILK
     	liquidSpread(row, col, MILK);
+    	
+    	// VAPORS
+    	gasSpread(row, col, VAPORS);
+    	
     }
     
     catch(ArrayIndexOutOfBoundsException boundsExcept)
@@ -225,6 +234,71 @@ public class SandLab
   		}
   	}
   	
+  }
+  
+  public void gasSpread(int row, int col, int element)
+  {
+  	int displaced;
+  	int up = row + 1;
+  	int down = row - 1;
+  	int left = col - 1;
+  	int right = col + 1;
+  	
+  	if(grid[row][col] == element)
+  	{
+  		// check vertical
+  		if(row != 0 || row != 19)
+  		{
+  			if(goThroughable(grid[up][col]))
+  			{
+  				displaced = grid[up][col];
+  				grid[row][col] = displaced;
+  				grid[up][col] = element;
+  			}
+  		}
+  		else // horizontal
+  		{
+  			if(col != 0 || col != 18)
+  			{
+  				operation = getR(2);
+  				if(operation == 1)
+  				{
+  					if(goThroughable(grid[row][left]))
+  					{
+  						displaced = grid[row][left];
+  						grid[row][col] = displaced;
+  						grid[row][left] = element;
+  					}
+  				}
+  				else
+  				{
+  					if(goThroughable(grid[row][right]))
+  					{
+  						displaced = grid[row][right];
+  						grid[row][col] = displaced;
+  						grid[row][right] = element;		
+  					}
+  				}		
+  			}
+  		}
+  	}
+  }
+  
+  public boolean goThroughable(int element)
+  {
+  	switch(element)
+  	{
+  	case WATER:
+  		return true;
+  	case MILK:
+  		return true;
+  	case SAND:
+  		return true;
+  	case EMPTY:
+  		return true;
+  	default:
+  		return false;
+  	}
   }
   
   //do not modify this method!
